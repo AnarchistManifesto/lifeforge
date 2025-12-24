@@ -1,5 +1,17 @@
+[providers]
+node = "25.2.1"
+
+[phases.setup]
+nixPkgs = ["...", "bun"]
+aptPkgs = ["...", "unzip"]
+
 [phases.install]
+dependsOn = ["setup"]
 cmds = ["bun install"]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["echo 'Build phase skipped'"]
 
 [start]
 cmd = "bun upgrade && bun install --linker isolated && bun run start"
