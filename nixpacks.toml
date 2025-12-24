@@ -1,5 +1,20 @@
-[build]
-builder = "NIXPACKS"
+[variables]
+NIXPACKS_NO_MUSL = '1'
 
-[deploy]
-startCommand = "bun upgrade && bun install --linker isolated && cd server && bun run start"
+[providers]
+node = "25.2.1"
+
+[phases.setup]
+nixPkgs = ["bun"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = [
+  "curl -fsSL https://bun.sh/install | bash",
+  "export BUN_INSTALL=\"$HOME/.bun\"",
+  "export PATH=\"$BUN_INSTALL/bin:$PATH\"",
+  "bun install"
+]
+
+[start]
+cmd = "bun upgrade && bun install --linker isolated && bun run start"
